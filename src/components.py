@@ -1,3 +1,4 @@
+from functools import reduce
 from textnode import TextNode, TextType
 from htmlnode import HTMLNode, ParentNode, LeafNode
 
@@ -26,15 +27,32 @@ def split_nodes_delimiter(old_nodes, delimiter, text_type):
     if checking_node.text_type != TextType.TEXT:
         new_nodes.append(checking_node)
     else:
-        word_arr = checking_node.text.split(" ")
-        filtered_arr = filter(lambda word: delimiter in word, word_arr)
-        if len(filtered_arr) % 2 != 0:
-            raise Exception(f"Missing closing delimiter {
-                            delimiter} in: {checking_node.text}")
-        indexes = list(map(lambda l: word_arr.index(l), filtered_arr))
+        if checking_node.text[0] == delimiter:
+            new_nodes.extend(check_text_for_delimiter(
+                checking_node.text, delimiter, text_type, text_type))
+        else:
+            new_nodes.extend(check_text_for_delimiter(
+                checking_node.text, delimiter, TextType.TEXT, text_type))
 
     if len(old_nodes) == 1:
         return new_nodes
     new_nodes.extend(split_nodes_delimiter(
         old_nodes[1:], delimiter, text_type))
     return new_nodes
+
+
+def check_text_for_delimiter(sentence, delimiter, finding_text_type, text_type):
+    nodes = []
+    if finding_text_type != TextType.TEXT:
+        check = sentence.find(delimiter)
+        if check == -1:
+            raise Exception(f"Closing delimiter {
+                            delimiter} was not found in --- {sentence}")
+    splited_text = sentence.split(delimiter, 1)
+    nodes.append(TextNode(splited_text[0], finding_text_type))
+    if len(splited_text) == 1:
+        return nodes
+    if finding_text_type != text_type:
+        return nodes + check_text_for_delimiter(splited_text[1], delimiter, text_type, text_type)
+    else:
+        return nodes + check_text_for_delimiter(splited_text[1], delimiter, TextType.TEXT, text_type)

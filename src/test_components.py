@@ -2,7 +2,7 @@ import unittest
 
 from textnode import TextNode, TextType
 from htmlnode import HTMLNode, LeafNode, ParentNode
-from components import text_node_to_html_node
+from components import text_node_to_html_node, split_nodes_delimiter
 
 
 class TestHTMLNode(unittest.TestCase):
@@ -22,6 +22,9 @@ class TestHTMLNode(unittest.TestCase):
         self.assertEqual(html_node_link.value, "This is a anchor node")
         self.assertEqual(html_node_link.props, {
                          "href": "https://www.google.com"})
+        node = TextNode("This is text with a `code block` word", TextType.TEXT)
+        new_nodes = split_nodes_delimiter([node], "`", TextType.CODE)
+        print(new_nodes)
 
 
 if __name__ == "__main__":

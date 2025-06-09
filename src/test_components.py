@@ -22,9 +22,27 @@ class TestHTMLNode(unittest.TestCase):
         self.assertEqual(html_node_link.value, "This is a anchor node")
         self.assertEqual(html_node_link.props, {
                          "href": "https://www.google.com"})
-        node = TextNode("This is text with a `code block` word", TextType.TEXT)
-        new_nodes = split_nodes_delimiter([node], "`", TextType.CODE)
-        print(new_nodes)
+
+    def test_split_nodes_delimiter(self):
+        node1 = TextNode(
+            "This is text with a `code block` word", TextType.TEXT)
+        new_nodes1 = split_nodes_delimiter([node1], "`", TextType.CODE)
+        self.assertEqual(new_nodes1, [TextNode("This is text with a ", "normal", None), TextNode(
+            "code block", "code", None), TextNode(" word", "normal", None)])
+
+        node2 = TextNode(
+            "This is text with a **bold block** and also _italic block_ word", TextType.TEXT)
+        bold_nodes2 = split_nodes_delimiter([node2], "**", TextType.BOLD)
+        italic_nodes2 = split_nodes_delimiter(
+            bold_nodes2, "_", TextType.ITALIC)
+        self.assertEqual(italic_nodes2, [TextNode("This is text with a ", "normal", None), TextNode("bold block", "bold", None), TextNode(
+            " and also ", "normal", None), TextNode("italic block", "italic", None), TextNode(" word", "normal", None)])
+        node3 = TextNode(
+            "This is text with a **bold block** and also _italic block word", TextType.TEXT)
+        bold_nodes3 = split_nodes_delimiter([node3], "**", TextType.BOLD)
+        with self.assertRaises(Exception):
+            italic_nodes3 = split_nodes_delimiter(
+                bold_nodes3, "_", TextType.ITALIC)
 
 
 if __name__ == "__main__":

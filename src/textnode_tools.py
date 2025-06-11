@@ -38,8 +38,6 @@ def delimiter_from_text_type(text_type):
         case _:
             raise Exception("Invalid TEXT TYPE")
 
-# "This is text with a link [to boot dev](https://www.boot.dev) and [to youtube](https://www.youtube.com/@bootdotdev)"
-
 
 def split_nodes_link_and_image(old_nodes, text_type):
     new_nodes = []

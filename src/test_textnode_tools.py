@@ -2,7 +2,7 @@ import unittest
 
 from textnode import TextNode, TextType
 from htmlnode import HTMLNode, LeafNode, ParentNode
-from components import text_node_to_html_node, split_nodes_delimiter, split_nodes_link_and_image, text_to_text_nodes
+from textnode_tools import text_node_to_html_node, split_nodes_delimiter, split_nodes_link_and_image, text_to_text_nodes
 
 
 class TestHTMLNode(unittest.TestCase):

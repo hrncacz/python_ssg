@@ -1,13 +1,12 @@
 from textnode import TextNode
-from public_generator import list_folder_recursively, delete_public, copy_to_public
+from public_generator import generate_public
+from page_generator import generate_pages_recursively
 
 
 def main():
-    test_t = TextNode("This is some anchor text",
-                      "link", "https://www.boot.dev")
-    delete_public()
-    copy_to_public("./static", "./public",
-                   list_folder_recursively(".", "static"))
+    print("Starting SSG")
+    generate_public("./static", "./public")
+    generate_pages_recursively("./content",  "./public", "./template.html")
 
 
 main()

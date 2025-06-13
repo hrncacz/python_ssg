@@ -21,25 +21,24 @@ def delete_public():
 
 def copy_to_public(from_folder, to_folder, folder_dict):
     if not os.path.exists(to_folder):
+        print(f"- creating directory - {to_folder}")
         os.mkdir(to_folder)
     for fd in folder_dict.items():
         if isinstance(fd[1], dict):
             copy_to_public(os.path.join(from_folder, fd[0]), os.path.join(
                 to_folder, fd[0]), fd[1])
         else:
+            print(f"- copying - {os.path.join(
+                from_folder, fd[0])}")
             shutil.copy(os.path.join(
                 from_folder, fd[0]), os.path.join(to_folder, fd[0]))
 
 
-test = """
-
-{
-    static: {
-        images: {
-            tolkien.png: None
-        },
-        index.css: None
-    }
-}
-
-"""
+def generate_public(from_folder, to_folder):
+    print("-----GENERATE PUBLIC FOLDER-----")
+    print(f"---Cleaning old {to_folder}---")
+    delete_public()
+    print(f"---Reading {from_folder}---")
+    folder_dict = list_folder_recursively(".", "static")
+    print("---Starting to copy files---")
+    copy_to_public(from_folder, to_folder, folder_dict)

@@ -15,11 +15,10 @@ class BlockType(Enum):
 
 
 def block_to_block_type(block):
-    if re.search(r"^\*{1,6}\s{1}", block):
+    if re.search(r"^\#{1,6}\s{1}", block):
         splited = block.split(" ", 1)
-        h_level = splited[0].count("*")
+        h_level = splited[0].count("#")
         return basic_blocks(BlockType.HEADING.value + str(h_level), splited[1])
-    # elif re.search(r"^```\n(.*)*\n```$", block, re.M):
     elif block.startswith("```") and block.endswith("```"):
         return code_blocks(BlockType.CODE.value, block[3:len(block)-3].removeprefix("\n"))
     elif block.startswith(">"):

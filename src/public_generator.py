@@ -39,6 +39,8 @@ def generate_public(from_folder, to_folder):
     print(f"---Cleaning old {to_folder}---")
     delete_public()
     print(f"---Reading {from_folder}---")
-    folder_dict = list_folder_recursively(".", "static")
+    from_folder_arr = from_folder.split("/")
+    folder_dict = list_folder_recursively(
+        "/".join(from_folder_arr[:len(from_folder_arr)-1]), from_folder_arr[-1])
     print("---Starting to copy files---")
     copy_to_public(from_folder, to_folder, folder_dict)
